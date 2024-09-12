@@ -1,6 +1,12 @@
-export default  `
+export default `
     type ChatResponse {
-        response: String!
+        responseMessage: String!
+        isEmpty: Boolean
+        eventName: String
+        location: String
+        from: String
+        to: String
+        type: String
     }
 
     input InputMessage {
@@ -8,6 +14,6 @@ export default  `
     }
 
     type Mutation {
-        chatCommand(inputMessage: InputMessage!): [ChatResponse]!
+        chatCommand(inputMessage: InputMessage!): ChatResponse!
     }
 `

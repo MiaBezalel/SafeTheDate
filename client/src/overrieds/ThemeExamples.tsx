@@ -1,5 +1,5 @@
-import { Button, Divider, Grid, Paper, Typography } from "@mui/material";
-import Stack from "@mui/material/Stack";
+import { Button, Divider, Grid, Paper, Typography } from "@mui/material"
+import Stack from "@mui/material/Stack"
 
 // use this component to see palette examples
 const ThemeExamples = () => {
@@ -85,6 +85,6 @@ const ThemeExamples = () => {
         overline text
       </Typography>
     </Paper>
-  );
-};
-export default ThemeExamples;
+  )
+}
+export default ThemeExamples

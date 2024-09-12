@@ -1,4 +1,4 @@
-import { Dialog, DialogTitle, IconButton, styled } from '@mui/material';
+import { Dialog, DialogTitle, IconButton, styled } from '@mui/material'
 
 export const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -7,16 +7,16 @@ export const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogActions-root': {
     padding: theme.spacing(1),
   },
-}));
+}))
 
 export interface DialogTitleProps {
-  id: string;
-  children?: React.ReactNode;
-  onClose: () => void;
+  id: string
+  children?: React.ReactNode
+  onClose: () => void
 }
 
 export function BootstrapDialogTitle(props: DialogTitleProps) {
-  const { children, onClose, ...other } = props;
+  const { children, onClose, ...other } = props
 
   return (
     <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
@@ -35,5 +35,5 @@ export function BootstrapDialogTitle(props: DialogTitleProps) {
         </IconButton>
       )}
     </DialogTitle>
-  );
+  )
 }

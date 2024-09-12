@@ -6,6 +6,7 @@ src/graphql/typeDefs/index.ts
 /node_modules
 /.pnp
 .pnp.js
+\files
 
 .idea
 # testing
@@ -29,4 +30,4 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-src/graphql
+/html-report

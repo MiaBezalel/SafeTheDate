@@ -17,8 +17,8 @@ import {
   IsNumberOptions,
   registerDecorator,
   ValidationArguments,
-} from "class-validator";
-import ValidatorJS from "validator";
+} from "class-validator"
+import ValidatorJS from "validator"
 
 export const IsNumber = (
   options?: IsNumberOptions,
@@ -30,7 +30,7 @@ export const IsNumber = (
       ...validationOptions,
       message: "השדה חייב להיות מספר",
     }
-  );
+  )
 
 export const IsPositive = (
   validationOptions?: ValidationOptions
@@ -38,7 +38,7 @@ export const IsPositive = (
   _IsPositive({
     ...validationOptions,
     message: "השדה חייב להיות מספר חיובי",
-  });
+  })
 
 export const IsEmail = (
   options?: ValidatorJS.IsEmailOptions,
@@ -52,7 +52,7 @@ export const IsEmail = (
       ...validationOptions,
       message: "המייל אינו חוקי",
     }
-  );
+  )
 
 export const IsDate = (
   validationOptions?: ValidationOptions
@@ -60,7 +60,7 @@ export const IsDate = (
   _IsDate({
     ...validationOptions,
     message: "השדה חייב להיות תאריך",
-  });
+  })
 
 export const Max = (
   maxValue: number,
@@ -69,7 +69,7 @@ export const Max = (
   _Max(maxValue, {
     ...validationOptions,
     message: `הערך המקסימלי הינו ${maxValue}`,
-  });
+  })
 
 export const Min = (
   minValue: number,
@@ -78,7 +78,7 @@ export const Min = (
   _Min(minValue, {
     ...validationOptions,
     message: `הערך המינימלי הינו ${minValue}`,
-  });
+  })
 
 export const IsIn = (
   values: readonly any[],
@@ -87,7 +87,7 @@ export const IsIn = (
   _IsIn(values, {
     ...validationOptions,
     message: `הערך חייב להיות מתוך רשימת הערכים האפשריים בלבד`,
-  });
+  })
 
 export const IsBoolean = (
   validationOptions?: ValidationOptions
@@ -95,7 +95,7 @@ export const IsBoolean = (
   _IsBoolean({
     ...validationOptions,
     message: `הערך חייב להיות בוליאני`,
-  });
+  })
 
 export const IsNumberString = (
   options?: ValidatorJS.IsNumericOptions,
@@ -107,7 +107,7 @@ export const IsNumberString = (
       ...validationOptions,
       message: `הערך חייב להיות מחרוזת המכילה מספרים בלבד`,
     }
-  );
+  )
 
 export const Length = (
   min: number,
@@ -120,7 +120,7 @@ export const Length = (
       max === min
         ? `האורך חייב להיות בדיוק ${min}`
         : `האורך חייב להיות בין ${min} ל ${max}`,
-  });
+  })
 
 export const IsArray = (
   validationOptions?: ValidationOptions
@@ -128,7 +128,7 @@ export const IsArray = (
   _IsArray({
     ...validationOptions,
     message: `הערך המתקבל חייב להיות מערך`,
-  });
+  })
 
 export const IsString = (
   validationOptions?: ValidationOptions
@@ -136,7 +136,7 @@ export const IsString = (
   _IsString({
     ...validationOptions,
     message: `הערך המתקבל חייב להיות מסוג מחרוזת`,
-  });
+  })
 
 export const IsNotEmpty = (
   validationOptions?: ValidationOptions
@@ -144,7 +144,7 @@ export const IsNotEmpty = (
   _IsNotEmpty({
     ...validationOptions,
     message: `השדה לא יכול להיות ריק`,
-  });
+  })
 
 export const ArrayNotEmpty = (
   validationOptions?: ValidationOptions
@@ -152,4 +152,4 @@ export const ArrayNotEmpty = (
   _ArrayNotEmpty({
     ...validationOptions,
     message: `המערך לא יכול להיות ריק`,
-  });
+  })

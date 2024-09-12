@@ -1,10 +1,10 @@
-import express from "express";
+import express from "express"
 
-const router = express.Router();
+const router = express.Router()
 
 // health check for Gateway
 router.get("/", (req, res) => {
-  res.send("Server is up and running");
-});
+  res.send("Server is up and running")
+})
 
-export default router;
+export default router

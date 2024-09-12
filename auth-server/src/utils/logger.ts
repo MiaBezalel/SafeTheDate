@@ -1,6 +1,6 @@
 export interface ILogger {
-  error: (exception: Error) => void;
-  event: (name: Events, properties: Record<string, string>) => void;
+  error: (exception: Error) => void
+  event: (name: Events, properties: Record<string, string>) => void
 }
 
 export enum Events {
@@ -8,27 +8,27 @@ export enum Events {
 }
 
 export class ConsoleLogger implements ILogger {
-  private static consoleLogger: ConsoleLogger;
+  private static consoleLogger: ConsoleLogger
 
   private constructor() {}
 
   public static getInstance(): ConsoleLogger {
     if (!this.consoleLogger) {
-      this.consoleLogger = new ConsoleLogger();
-      this.setupLogger();
+      this.consoleLogger = new ConsoleLogger()
+      this.setupLogger()
     }
-    return this.consoleLogger;
+    return this.consoleLogger
   }
 
   public error = (exception: Error) => {
-    console.info(`Exception occrued: ${exception.message}`);
-  };
+    console.info(`Exception occrued: ${exception.message}`)
+  }
   public event = (name: Events, properties?: { [key: string]: any }) => {
     console.info(
       `Event triggred:  ${name} with props: ${
         properties ? JSON.stringify(properties) : "None"
       }`
-    );
-  };
-  private static setupLogger = () => {};
+    )
+  }
+  private static setupLogger = () => {}
 }

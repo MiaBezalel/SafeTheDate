@@ -1,25 +1,25 @@
-import User, { IUser } from "mongo/models/User";
-import mongoose, { ObjectId } from "mongoose";
+import User, { IUser } from "mongo/models/User"
+import mongoose, { ObjectId } from "mongoose"
 
 export interface ServerError {
   functionalityError: {
-    code: number;
-    message: string;
-  };
+    code: number
+    message: string
+  }
 }
 
-export const ObjectID = mongoose.Schema.Types.ObjectId;
+export const ObjectID = mongoose.Schema.Types.ObjectId
 
 export interface FormFieldError<T> {
-  fieldName: keyof T;
-  message: string;
+  fieldName: keyof T
+  message: string
 }
 export type PayloadValidationError<T> = {
-  [key in keyof T]: string[];
-};
+  [key in keyof T]: string[]
+}
 
 export interface ServerValidationsReturn<T extends object> {
-  fieldErrors: PayloadValidationError<T>;
+  fieldErrors: PayloadValidationError<T>
 }
 
 export enum HttpStatus {
@@ -73,7 +73,7 @@ export enum HttpStatus {
   HTTP_VERSION_NOT_SUPPORTED = 505,
 }
 
-export const stringToBoolean = (boolean?: string) => boolean === "true";
+export const stringToBoolean = (boolean?: string) => boolean === "true"
 
 export enum PromisifyStatus {
   fulfilled = "fulfilled",
@@ -81,8 +81,10 @@ export enum PromisifyStatus {
 }
 
 export interface IToken {
-  token: string;
-  expiryDate: Date;
+  token: string
+  expiryDate: Date
 }
 
-export type AccessTokenPayload = Omit<IUser, "password">;
+export type TokenPayload = Omit<IUser, "image">
+
+export type AccessTokenPayload = Omit<IUser, "password" | "image">

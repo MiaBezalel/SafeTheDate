@@ -1,40 +1,31 @@
-const express = require('express');
-const cors = require('cors');
-const cookieParser = require('cookie-parser');
-
+import { useCookies } from "@whatwg-node/server-plugin-cookies";
 import { createYoga } from "graphql-yoga";
 import getSchema from "./graphql/shcema";
 import settings from "./config/settings";
 import setUpMongo from "../mongo/mongoDbManager";
 
-(async () => {
+export const yoga = createYoga({
+  schema: getSchema(),
+  plugins: [useCookies()],
+});
 
-  const app = express();
+setUpMongo();
+let app;
+console.log(process.env.IS_DEVELOPMENT === "true" ? "dev mode" : "prod mode");
+if (process.env.IS_DEVELOPMENT === "false") {
+  const https = require("https");
+  const fs = require("fs");
+  const options = {
+    key: fs.readFileSync("../../../../etc/ssl/myserver.key"),
+    cert: fs.readFileSync("../../../../etc/ssl/cs.crt"),
+  };
+  app = https.createServer(options, yoga);
+} else {
+  const http = require("http");
+  app = http.createServer(yoga);
+}
 
-  // Create a Yoga instance with a GraphQL schema.
-  const yoga = createYoga({ schema: await getSchema() });
-
-  setUpMongo();
-
-  app.use(cookieParser());
-  
-  app.use(cors({
-    origin: [process.env.FRONTEND_ENDPOINT!, process.env.BACKEND_ENDPOINT!, "http://localhost:3000"],
-    methods: "DELETE, PUT, POST, GET, OPTIONS",
-    allowedHeaders: [
-      "Access-Control-Allow-Origin",
-      "Content-Type",
-      "Access-Control-Allow-Headers",
-      "Access-Control-Allow-Methods",
-      "Set-Cookie",
-      "X-Requested-With",
-    ],
-    credentials: true,
-  }));
-
-  app.use('/graphql', yoga);
-
-  // Start the server and you're done!
-  app.listen(settings.port);
-  console.log(`Running a GraphQL API server at http://localhost:${settings.port}/graphql`);
-})();
+app.listen(settings.port);
+console.log(
+  `Running a GraphQL API server at http://localhost:${settings.port}/graphql`
+);

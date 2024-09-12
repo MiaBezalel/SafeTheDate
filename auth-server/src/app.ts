@@ -1,4 +1,7 @@
 import express from "express";
+import swaggerJsdoc from 'swagger-jsdoc';
+import swaggerUi from 'swagger-ui-express';
+
 import "./lib/dotenv-init";
 import "./lib/reflect-metadata";
 import helmet from "helmet";
@@ -17,6 +20,33 @@ const SERVER_PORT = process.env.BACKEND_PORT || 80; // default port of http is 8
 const app = express();
 
 // ---------App Middlewares--------
+
+
+
+if (process.env.IS_DEVELOPMENT === "true") {
+  // Swagger options
+  const swaggerOptions = {
+    definition: {
+      openapi: '3.0.0',
+      info: {
+        title: 'SafeTheDate API',
+        version: '1.0.0',
+        description: 'API documentation for SafeTheDate API',
+      },
+      servers: [
+        {
+          url: `http://localhost:${SERVER_PORT}`,
+        },
+      ],
+    },
+    apis: ['src/routes/*.ts'], // Path to the API routes
+  };
+
+  const swaggerSpec = swaggerJsdoc(swaggerOptions);
+
+  // Swagger endpoint
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+}
 
 app.use(helmet()); // Security headers & policies addon
 app.use(compression());
@@ -60,6 +90,20 @@ app.use("/api", router);
 // Global Error Handler
 app.use(errorHandler());
 
-app.listen(SERVER_PORT, () => {
-  console.log("Listening on port " + SERVER_PORT);
-});
+console.log(process.env.IS_DEVELOPMENT === "true" ? "dev mode" : "prod mode");
+if (process.env.IS_DEVELOPMENT === "false") {
+  const https = require("https");
+  const fs = require("fs");
+  const options = {
+    key: fs.readFileSync("../../../../etc/ssl/myserver.key"),
+    cert: fs.readFileSync("../../../../etc/ssl/cs.crt"),
+  };
+  const server = https.createServer(options, app);
+  server.listen(SERVER_PORT, () => {
+    console.log("Listening on port " + SERVER_PORT);
+  });
+} else {
+  app.listen(SERVER_PORT, () => {
+    console.log("Listening on port " + SERVER_PORT);
+  });
+}

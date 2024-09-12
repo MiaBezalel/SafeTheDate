@@ -1,15 +1,22 @@
-import { Client, Provider, cacheExchange, fetchExchange } from 'urql';
-import {PropsWithChildren} from "react";
+import {
+  Provider,
+  cacheExchange,
+  fetchExchange,
+  createClient,
+} from "urql";
+import { PropsWithChildren } from "react";
 
-const client = new Client({
-    url: 'http://localhost:4000/graphql',
-    exchanges: [cacheExchange, fetchExchange],
+const client = createClient({
+  url: process.env.REACT_APP_BACKEND_URL + "/graphql",
+  exchanges: [cacheExchange, fetchExchange],
+  requestPolicy: "network-only",
+  fetchOptions: {
+    credentials: 'include'
+  }
 });
 
-const GraphqlClientProvider = ({children}: PropsWithChildren) => (
-    <Provider value={client}>
-        {children}
-    </Provider>
+const GraphqlClientProvider = ({ children }: PropsWithChildren) => (
+  <Provider value={client}>{children}</Provider>
 );
 
-export default GraphqlClientProvider
+export default GraphqlClientProvider;

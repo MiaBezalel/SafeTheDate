@@ -21,6 +21,10 @@ export enum serverErrorCodes {
   TypeNotExsist,
   NoSuchRefreshToken,
   NoSuchConfirmationKey,
+  InvalidResetToken,
+  UserNotExists,
+  UserHasNoSuchOrder,
+  TooManyRequests,
 }
 
 // For passing arguments to error message use &1 &2 and so on
@@ -45,6 +49,13 @@ export const serverErrorsMessage: { [id in serverErrorCodes]: string } = {
   [serverErrorCodes.NoSuchRefreshToken]:
     "לא הצלחנו לחדש את חיבורך, אנא התחבר מחדש",
   [serverErrorCodes.NoSuchConfirmationKey]: "לא קיים קוד אישור כזה",
+  [serverErrorCodes.InvalidResetToken]: "קוד איפוס שגוי",
+  [serverErrorCodes.UserNotExists]: "מצטערים, לא מצאנו את החשבון שלך",
+  [serverErrorCodes.UserHasNoSuchOrder]:
+    "מצטערים, נראה שאין לך עוד מהשירות המבוקש, רכוש חדש או צור איתנו קשר במידה וחווית תקלה",
+
+  [serverErrorCodes.TooManyRequests]:
+    "Too many requests from this IP, please try again later.",
 };
 
 export const retServerError = (
@@ -84,7 +95,7 @@ export class FunctionalityError extends Error {
   constructor(
     serverErrorCode: serverErrorCodes,
     argumentsArray?: string[],
-    httpErrorCode: number = 400
+    httpErrorCode: HttpStatus = HttpStatus.BAD_REQUEST
   ) {
     let message = serverErrorsMessage[serverErrorCode];
     argumentsArray?.forEach(

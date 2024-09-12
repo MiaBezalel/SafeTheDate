@@ -1,26 +1,26 @@
-import { Expose } from "class-transformer";
-import { IsString, IsEmail } from "../utils/classValidator.utils";
+import { Expose } from "class-transformer"
+import { IsString, IsEmail } from "../utils/classValidator.utils"
 
 //TODO: add name dto decorator
 export class RegisterDTO {
   @IsEmail()
   @Expose()
-  email: string;
+  email: string
 
   @IsString()
   @Expose()
-  username: string;
+  username: string
 
   @IsString()
   @Expose()
-  firstName: string;
+  firstName: string
 
   @IsString()
   @Expose()
-  lastName: string;
+  lastName: string
 
   // TODO: todo is password later on
   @IsString()
   @Expose()
-  password: string;
+  password: string
 }

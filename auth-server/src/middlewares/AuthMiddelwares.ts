@@ -1,15 +1,14 @@
 import { RequestHandler } from "express";
-import { Jwt, JwtPayload, TokenExpiredError, verify, sign } from "jsonwebtoken";
-import { ACCESS_TOKEN_COOKIE_NAME, REFRESH_TOKEN_COOKIE_NAME } from "../constants";
+import { Jwt, JwtPayload, TokenExpiredError, verify } from "jsonwebtoken";
+import { ACCESS_TOKEN_COOKIE_NAME } from "../constants";
 import appLogger from "../lib/app-logger";
 import {
   FunctionalityError,
   retServerError,
   serverErrorCodes,
-} from "../utils/error";
-import { ILogger } from "../utils/logger";
-import { AccessTokenPayload, HttpStatus } from "../utils/types";
-
+} from "../utils/error"
+import { ILogger } from "../utils/logger"
+import { AccessTokenPayload, HttpStatus } from "../utils/types"
 
 export function verifyJWTToken(
   token: string,
@@ -19,20 +18,18 @@ export function verifyJWTToken(
   return new Promise((resolve, reject) => {
     verify(token, secret, options, (err, decodedToken) => {
       if (err || !decodedToken) {
-        return reject(err);
+        return reject(err)
       }
 
-      resolve(decodedToken);
-    });
-  });
+      resolve(decodedToken)
+    })
+  })
 }
 
 export const useAuthorizationParser: (logger?: ILogger) => RequestHandler =
   (logger: ILogger = appLogger()) =>
   async (req, res, next) => {
-    
-    console.log(req.cookies)
-    const authToken = (req.cookies ?? {})[REFRESH_TOKEN_COOKIE_NAME];
+    const authToken = (req.cookies ?? {})[ACCESS_TOKEN_COOKIE_NAME];
 
     if (!authToken) {
       logger.error(
@@ -41,39 +38,31 @@ export const useAuthorizationParser: (logger?: ILogger) => RequestHandler =
           [],
           HttpStatus.FORBIDDEN
         )
-      );
-      return next();
+      )
+      return next()
     }
 
     // If bearer token has been sent, send to client if its invalid or expired
-    verifyJWTToken(authToken, process.env.REFRESH_TOKEN_SECRET ?? "", {})
+    verifyJWTToken(authToken, process.env.JWT_SECRET ?? "", {
+      audience: process.env.JWT_AUDIENCE,
+      issuer: process.env.JWT_ISSUER ?? "",
+    })
       .then((jwtPayload) => {
-        req.user = jwtPayload as AccessTokenPayload;
-        return next();
+        req.user = jwtPayload as AccessTokenPayload
+        return next()
       })
       .catch((e) => {
-        logger.error(e);
-        return next();
-      });
-  };
-
-
-export const createToken = (userId: string, userEmail: string) => {
-  const token: string = sign(
-  { user_id: userId, userEmail }, 
-  process.env.ACCESS_TOKEN_SECRET as string,
-  {
-    expiresIn: process.env.JWT_EXPIRATION,
-  })
-  return token
-};
+        logger.error(e)
+        return next()
+      })
+  }
 
 export const useAuth: RequestHandler = (req, res, next) => {
   if (!req.user || !req.user.username) {
     return res
       .status(HttpStatus.UNAUTHORIZED)
-      .json(retServerError(serverErrorCodes.UserIsMissing));
+      .json(retServerError(serverErrorCodes.UserIsMissing))
   }
 
-  return next();
-};
+  return next()
+}

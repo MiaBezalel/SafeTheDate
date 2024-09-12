@@ -1,9 +1,6 @@
-import { Expose } from "class-transformer";
-import { IsNotEmpty, IsString } from "../utils/classValidator.utils";
-
-export class TokenRequestDTO {
-  @IsNotEmpty()
-  @IsString()
-  @Expose()
+export class TokensPack {
   refreshToken: string;
+  refreshExpiryDate: Date;
+  accessToken: string;
+  expiresIn: number;
 }

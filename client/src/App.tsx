@@ -1,26 +1,32 @@
-import Events from "./components/Events";
-import { Box, Container } from "@mui/material";
+import { Container } from "@mui/material";
 import Login from "./components/Login";
+import UserConfirmation from "./components/UserConfirmation";
 import Signup from "./components/Signup";
 import Navbar from "./components/AppBar/AppBar";
-import {
-  RouterProvider,
-  createBrowserRouter,
-  Outlet,
-} from "react-router-dom";
+import { RouterProvider, createBrowserRouter, Outlet } from "react-router-dom";
 import PrivateRoute from "./utils/PrivateRoute";
 import { CreateEvent } from "./components/CreateEvent";
+import { Event } from "./components/Event/Event";
 import { ImportTicket } from "./components/ImportTicket";
+import CaptainEvents from "./components/CapatinEvents";
+import ScanEvent from "./components/ScanEvent";
+import MyTickets from "./components/profile/MyTickets";
 import { Profile } from "./components/profile/Profile";
 import { MyEvents } from "./components/profile/MyEvents";
-import { MyTickets } from "./components/profile/MyTickets";
-import Captain from "./components/Captain";
+import SideChatbot from "./components/SideChatbot";
+import { EventsPage } from "./components/EventsPage/EventsPage";
+import { useAuth } from "./hooks/authController/AuthContext";
+import { useEffect } from "react";
+import { MyDetails } from "./components/profile/MyDetails";
+import ForgotPassword from "./components/ForgotPassword";
 
 // use this enum to make links to pages
 export enum RoutePaths {
   LOGIN = "/login",
+  FORGOT_PASSWORD = "/forgotpassword",
   SIGNUP = "/signup",
   EVENTS = "/",
+  CAPTAIN_EVENTS = "/captain/events",
   CAPTAIN = "/captain",
   CREATE_EVENT = "/create-event",
   IMPORT_TICKET = "/import-ticket",
@@ -28,6 +34,9 @@ export enum RoutePaths {
   MY_EVENTS = "/profile/events",
   MY_TICKETS = "/profile/tickets",
   MY_DETAILS = "/profile/details",
+  EVENT = "/event",
+  SCAN_EVENT = "/event/scan",
+  USER_CONFIRMATION = "/user-confirmation",
 }
 
 const router = createBrowserRouter([
@@ -35,11 +44,10 @@ const router = createBrowserRouter([
     element: (
       <>
         <Navbar />
-        <Box height="90%">
-          <Container sx={{ height: "inherit" }} maxWidth={"xl"}>
-            <Outlet />
-          </Container>
-        </Box>
+        <Container sx={{ height: "90%" }} maxWidth={"xl"}>
+          <Outlet />
+        </Container>
+        <SideChatbot />
       </>
     ),
     children: [
@@ -52,20 +60,24 @@ const router = createBrowserRouter([
         element: <Signup />,
       },
       {
+        path: RoutePaths.FORGOT_PASSWORD,
+        element: <ForgotPassword />,
+      },
+      {
         path: RoutePaths.EVENTS,
         element: (
           <PrivateRoute>
-            <Events />
+            <EventsPage />
           </PrivateRoute>
         ),
       },
       {
-        path: RoutePaths.CAPTAIN,
+        path: RoutePaths.CAPTAIN_EVENTS,
         element: (
           <PrivateRoute>
-            <Captain />
+            <CaptainEvents />
           </PrivateRoute>
-        )
+        ),
       },
       {
         path: RoutePaths.CREATE_EVENT,
@@ -74,6 +86,10 @@ const router = createBrowserRouter([
             <CreateEvent />
           </PrivateRoute>
         ),
+      },
+      {
+        path: RoutePaths.USER_CONFIRMATION,
+        element: <UserConfirmation />,
       },
       {
         path: RoutePaths.IMPORT_TICKET,
@@ -97,7 +113,7 @@ const router = createBrowserRouter([
               <PrivateRoute>
                 <MyEvents />
               </PrivateRoute>
-            )
+            ),
           },
           {
             path: RoutePaths.MY_TICKETS,
@@ -105,18 +121,17 @@ const router = createBrowserRouter([
               <PrivateRoute>
                 <MyTickets />
               </PrivateRoute>
-            )
+            ),
           },
           {
             path: RoutePaths.MY_DETAILS,
             element: (
               <PrivateRoute>
-                <ImportTicket />
+                <MyDetails />
               </PrivateRoute>
-            )
+            ),
           },
-
-        ]
+        ],
       },
       {
         path: RoutePaths.MY_EVENTS,
@@ -127,7 +142,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: RoutePaths.MY_EVENTS,
+        path: RoutePaths.MY_TICKETS,
         element: (
           <PrivateRoute>
             <MyTickets />
@@ -135,10 +150,18 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: RoutePaths.MY_EVENTS,
+        path: `${RoutePaths.SCAN_EVENT}/:id`,
         element: (
           <PrivateRoute>
-            <ImportTicket />
+            <ScanEvent />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: `${RoutePaths.EVENT}/:id`,
+        element: (
+          <PrivateRoute>
+            <Event />
           </PrivateRoute>
         ),
       },
@@ -147,6 +170,10 @@ const router = createBrowserRouter([
 ]);
 
 const App = () => {
+  const { checkIfSessionValid } = useAuth();
+  useEffect(() => {
+    checkIfSessionValid();
+  }, []);
   return <RouterProvider router={router} />;
 };
 

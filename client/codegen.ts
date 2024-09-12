@@ -1,14 +1,17 @@
-import { CodegenConfig } from '@graphql-codegen/cli'
+import { CodegenConfig } from "@graphql-codegen/cli";
+import dotenv from "dotenv";
+
+dotenv.config()
 
 const config: CodegenConfig = {
-    schema: 'http://localhost:4000/graphql',
-    documents: ['src/**/*.tsx'],
-    ignoreNoDocuments: true, // for better experience with the watcher
-    generates: {
-        './src/graphql/': {
-            preset: 'client'
-        }
-    }
-}
+  schema: process.env.REACT_APP_BACKEND_URL + "/graphql",
+  documents: ["src/**/*.tsx"],
+  ignoreNoDocuments: true,
+  generates: {
+    "./src/graphql/": {
+      preset: "client",
+    },
+  },
+};
 
-export default config
+export default config;

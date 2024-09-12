@@ -1,12 +1,12 @@
-import styled from "@emotion/styled";
+import styled from "@emotion/styled"
 
 interface ICenterProps {
-  direction?: string;
-  justifyContent?: string;
-  alignItems?: string;
-  height?: string;
-  width?: string;
-  children: React.ReactNode;
+  direction?: string
+  justifyContent?: string
+  alignItems?: string
+  height?: string
+  width?: string
+  children: React.ReactNode
 }
 
 const CenterStyle = styled.div((props: ICenterProps) => ({
@@ -16,7 +16,7 @@ const CenterStyle = styled.div((props: ICenterProps) => ({
   height: props.height ?? "auto",
   width: props.width ?? "auto",
   flexDirection: props.direction === "column" ? "column" : "row",
-}));
+}))
 
 export const Center: React.FC<ICenterProps> = ({
   direction = "column",
@@ -36,5 +36,5 @@ export const Center: React.FC<ICenterProps> = ({
     >
       {children}
     </CenterStyle>
-  );
-};
+  )
+}
